@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Abiha!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #ffc0cb;
+      font-family: 'Comic Sans MS', cursive;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .greeting {
+      text-align: center;
+      font-size: 28px;
+      color: #8b0000;
+      padding: 20px;
+      background-color: #fff0f5;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      font-weight: bold;
+    }
+
+    .grid {
+      flex: 1;
+      display: grid;
+      gap: 8px;
+      width: 100vw;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .btn {
+      width: 100%;
+      height: 100%;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
+      font-size: 20px;
+    }
+
+    .btn:hover {
+      background-color: #ff1493;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-110vh) translateX(var(--drift));
+        opacity: 1;
+      }
+    }
+
+    .balloon {
+      position: fixed;
+      bottom: -60px;
+      width: 30px;
+      height: 45px;
+      border-radius: 50% 50% 50% 50%;
+      z-index: 9999;
+      animation-name: floatUp;
+      animation-timing-function: linear;
+      animation-fill-mode: forwards;
+      box-shadow: inset -4px -8px rgba(0, 0, 0, 0.1);
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      width: 2px;
+      height: 40px;
+      background: repeating-linear-gradient(
+        -45deg,
+        #444,
+        #444 2px,
+        transparent 2px,
+        transparent 4px
+      );
+      animation: wave 1.5s infinite ease-in-out;
+      transform-origin: top center;
+      transform: translateX(-50%);
+    }
+
+    @keyframes wave {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      50% { transform: rotate(-5deg); }
+      75% { transform: rotate(3deg); }
+      100% { transform: rotate(0deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="greeting">
+    Greetings Abiha! <br>
+    One of the boxes below contains a surprise for you 🎁
+  </div>
+
+  <div class="grid" id="gridContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    const gridContainer = document.getElementById("gridContainer");
+    const buttonSize = 80;
+
+    const headerHeight = document.querySelector('.greeting').offsetHeight;
+    const screenHeight = window.innerHeight - headerHeight;
+    const screenWidth = window.innerWidth;
+
+    const columns = Math.floor(screenWidth / (buttonSize + 10));
+    const rows = Math.floor(screenHeight / (buttonSize + 10));
+    const totalButtons = rows * columns;
+
+    gridContainer.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+    gridContainer.style.gridAutoRows = `${buttonSize}px`;
+
+    const secretIndex = Math.floor(Math.random() * totalButtons);
+
+    function launchBalloons(count = 100) {
+      for (let i = 0; i < count; i++) {
+        const balloon = document.createElement('div');
+        balloon.className = 'balloon';
+
+        const colors = ['#ff4d4d', '#4dd2ff', '#ffcc00', '#66ff66', '#9966ff', '#ff66b3'];
+        balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+        balloon.style.left = Math.random() * 100 + 'vw';
+        balloon.style.setProperty('--drift', (Math.random() * 100 - 50) + 'px');
+
+        const delay = Math.random() * 1.5; // delay between 0-1.5s
+        const duration = 6 + Math.random() * 4; // duration 6-10s
+        balloon.style.animationDelay = `${delay}s`;
+        balloon.style.animationDuration = `${duration}s`;
+
+        document.body.appendChild(balloon);
+
+        // Optional cleanup after animation finishes
+        setTimeout(() => {
+          balloon.remove();
+        }, (delay + duration) * 1000);
+      }
+    }
+
+    for (let i = 0; i < totalButtons; i++) {
+      const btn = document.createElement("button");
+      btn.className = "btn";
+      btn.textContent = "🎁";
+
+      if (i === secretIndex) {
+        btn.onclick = () => {
+          alert("🎉 Happiest Birthday Abiha! 🎂. May You Have Many More 🥳");
+
+          confetti({
+            particleCount: 200,
+            spread: 90,
+            origin: { y: 0.6 }
+          });
+
+          launchBalloons(100);
+
+          btn.style.backgroundColor = "gold";
+          btn.style.color = "black";
+          btn.textContent = "🎉";
+          btn.disabled = true;
+        };
+      } else {
+        btn.onclick = () => {
+          btn.disabled = true;
+          btn.style.backgroundColor = "#ddd";
+          btn.style.color = "#888";
+          btn.textContent = "Nope 🤭";
+        };
+      }
+
+      gridContainer.appendChild(btn);
+    }
+  </script>
+
+</body>
+</html>
