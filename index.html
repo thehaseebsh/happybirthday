@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Happy Birthday Abiha!</title>
+  <title>Happy Birthday!</title>
   <style>
     body {
       margin: 0;
@@ -103,12 +103,63 @@
       75% { transform: rotate(3deg); }
       100% { transform: rotate(0deg); }
     }
+
+    /* Terms Modal Styles */
+    #termsModal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+
+    #termsModal .modal-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    #proceedBtn {
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: not-allowed;
+      transition: background 0.3s;
+    }
+
+    #proceedBtn.enabled {
+      background-color: #ff1493;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
+  <!-- Terms Modal -->
+  <div id="termsModal">
+    <div class="modal-content">
+      <h2>Terms & Conditions</h2>
+      <p>You must accept the following to continue:</p>
+      <label style="display: block; margin: 20px 0;">
+        <input type="checkbox" id="acceptCheckbox" />
+        I accept that Engineers are better than Doctors.
+      </label>
+      <button id="proceedBtn" disabled>Proceed </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
   <div class="greeting">
-    Greetings Abiha! <br>
+    Greetings Dr Abiha Ibrahim! <br>
     One of the boxes below contains a surprise for you 🎁
   </div>
 
@@ -117,6 +168,19 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
+    const modal = document.getElementById('termsModal');
+    const checkbox = document.getElementById('acceptCheckbox');
+    const proceedBtn = document.getElementById('proceedBtn');
+
+    checkbox.addEventListener('change', () => {
+      proceedBtn.disabled = !checkbox.checked;
+      proceedBtn.classList.toggle('enabled', checkbox.checked);
+    });
+
+    proceedBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
     const gridContainer = document.getElementById("gridContainer");
     const buttonSize = 80;
 
@@ -144,14 +208,13 @@
         balloon.style.left = Math.random() * 100 + 'vw';
         balloon.style.setProperty('--drift', (Math.random() * 100 - 50) + 'px');
 
-        const delay = Math.random() * 1.5; // delay between 0-1.5s
-        const duration = 6 + Math.random() * 4; // duration 6-10s
+        const delay = Math.random() * 1.5;
+        const duration = 6 + Math.random() * 4;
         balloon.style.animationDelay = `${delay}s`;
         balloon.style.animationDuration = `${duration}s`;
 
         document.body.appendChild(balloon);
 
-        // Optional cleanup after animation finishes
         setTimeout(() => {
           balloon.remove();
         }, (delay + duration) * 1000);
@@ -165,7 +228,7 @@
 
       if (i === secretIndex) {
         btn.onclick = () => {
-          alert("🎉 Happiest Birthday Abiha! 🎂. May You Have Many More 🥳");
+          alert(" 🎊 Happiest Birthday to You! 🎊. May you have many many more 🥳🥳🥳");
 
           confetti({
             particleCount: 200,
